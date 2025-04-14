@@ -1,5 +1,5 @@
 const test = require('brittle')
-const createTestnet = require('../../spacedht/testnet')
+const createTestnet = require('spacedht/testnet')
 
 const Spaceswarm = require('..')
 

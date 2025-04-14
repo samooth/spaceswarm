@@ -1,6 +1,6 @@
 const test = require('brittle')
-const crypto = require('../../spacecore-crypto')
-const createTestnet = require('../../spacedht/testnet')
+const crypto = require('spacecore-crypto')
+const createTestnet = require('spacedht/testnet')
 const { timeout } = require('./helpers')
 
 const Spaceswarm = require('..')

@@ -1,6 +1,6 @@
 const test = require('brittle')
 const Spaceswarm = require('..')
-const createTestnet = require('../../spacedht/testnet')
+const createTestnet = require('spacedht/testnet')
 
 test('connecting', async (t) => {
   t.plan(5)
