@@ -257,6 +257,7 @@ module.exports = class Spaceswarm extends EventEmitter {
 
     for (const peerInfo of this.explicitPeers) {
       if (!this._shouldConnectExplicit()) break
+      if (peerInfo.attempts >= 5 || (Date.now() - peerInfo.disconnectedTime) < peerInfo.attempts * 1000) continue
       this._connect(peerInfo, false)
     }
 
@@ -301,7 +302,7 @@ module.exports = class Spaceswarm extends EventEmitter {
 
   // Called when the DHT receives a new server connection.
   _handleServerConnection (conn) {
-    if (this.destroyed) {
+    if (this.destroyed || this.suspended) {
       // TODO: Investigate why a final server connection can be received after close
       conn.on('error', noop)
       return conn.destroy(ERR_DESTROYED)
@@ -463,7 +464,12 @@ module.exports = class Spaceswarm extends EventEmitter {
     if (!this._discovery.has(topicString)) return Promise.resolve()
 
     const discovery = this._discovery.get(topicString)
-    await discovery.destroy()
+
+    try {
+      await discovery.destroy()
+    } catch {
+      // ignore, prop network
+    }
 
     if (this._discovery.get(topicString) === discovery) {
       this._discovery.delete(topicString)
@@ -533,15 +539,15 @@ module.exports = class Spaceswarm extends EventEmitter {
     await this.dht.destroy({ force })
   }
 
-  async suspend () {
+  async suspend ({ log = noop } = {}) {
     if (this.suspended) return
 
     const promises = []
 
-    promises.push(this.server.suspend())
+    promises.push(this.server.suspend({ log }))
 
     for (const discovery of this._discovery.values()) {
-      promises.push(discovery.suspend())
+      promises.push(discovery.suspend({ log }))
     }
 
     for (const connection of this._allConnections) {
@@ -550,15 +556,21 @@ module.exports = class Spaceswarm extends EventEmitter {
 
     this.suspended = true
 
+    log('Suspending server and discovery... (' + promises.length + ')')
     await Promise.allSettled(promises)
-    await this.dht.suspend()
+    log('Done, suspending the dht...')
+    await this.dht.suspend({ log })
+    log('Done, swarm fully suspended')
   }
 
-  async resume () {
+  async resume ({ log = noop } = {}) {
     if (!this.suspended) return
 
+    log('Resuming the dht')
     await this.dht.resume()
+    log('Done, resuming the server')
     await this.server.resume()
+    log('Done, all discovery')
 
     for (const discovery of this._discovery.values()) {
       discovery.resume()
