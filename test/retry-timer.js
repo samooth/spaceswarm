@@ -1,5 +1,5 @@
 const test = require('brittle')
-const crypto = require('hypercore-crypto')
+const crypto = require('../../spacecore-crypto')
 const { timeout } = require('./helpers')
 
 const RetryTimer = require('../lib/retry-timer')

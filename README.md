@@ -1,20 +1,20 @@
-# hyperswarm
+# spaceswarm
 
-### [See the full API docs at docs.holepunch.to](https://docs.holepunch.to/building-blocks/hyperswarm)
+### [See the full API docs at docs.space.bsv.direct](https://docs.space.bsv.direct/building-blocks/spaceswarm)
 
 A high-level API for finding and connecting to peers who are interested in a "topic."
 
 ## Installation
 ```
-npm install hyperswarm
+npm install spaceswarm
 ```
 
 ## Usage
 ```js
-const Hyperswarm = require('hyperswarm')
+const Spaceswarm = require('spaceswarm')
 
-const swarm1 = new Hyperswarm()
-const swarm2 = new Hyperswarm()
+const swarm1 = new Spaceswarm()
+const swarm2 = new Spaceswarm()
 
 swarm1.on('connection', (conn, info) => {
   // swarm1 will receive server connections
@@ -36,10 +36,10 @@ await swarm2.flush() // Waits for the swarm to connect to pending peers.
 // After this point, both client and server should have connections
 ```
 
-## Hyperswarm API
+## Spaceswarm API
 
-#### `const swarm = new Hyperswarm(opts = {})`
-Construct a new Hyperswarm instance.
+#### `const swarm = new Spaceswarm(opts = {})`
+Construct a new Spaceswarm instance.
 
 `opts` can include:
 * `keyPair`: A Noise keypair that will be used to listen/connect on the DHT. Defaults to a new key pair.
@@ -57,17 +57,17 @@ A set of all active client/server connections.
 #### `swarm.peers`
 A Map containing all connected peers, of the form: `(Noise public key hex string) -> PeerInfo object`
 
-See the [`PeerInfo`](https://github.com/holepunchto/hyperswarm/blob/v3/README.md#peerinfo-api) API for more details.
+See the [`PeerInfo`](https://github.com/samooth/spaceswarm/blob/v3/README.md#peerinfo-api) API for more details.
 
 #### `swarm.dht`
-A [`hyperdht`](https://github.com/holepunchto/hyperdht) instance. Useful if you want lower-level control over Hyperswarm's networking.
+A [`spacedht`](https://github.com/samooth/spacedht) instance. Useful if you want lower-level control over Spaceswarm's networking.
 
 #### `swarm.on('connection', (socket, peerInfo) => {})`
 Emitted whenever the swarm connects to a new peer.
 
 `socket` is an end-to-end (Noise) encrypted Duplex stream
 
-`peerInfo` is a [`PeerInfo`](https://github.com/holepunchto/hyperswarm/blob/v3/README.md#peerinfo-api) instance
+`peerInfo` is a [`PeerInfo`](https://github.com/samooth/spaceswarm/blob/v3/README.md#peerinfo-api) instance
 
 #### `swarm.on('update', () => {})`
 Emitted when internal values are changed, useful for user interfaces.
@@ -82,10 +82,10 @@ Start discovering and connecting to peers sharing a common topic. As new peers a
 * `server`: Accept server connections for this topic by announcing yourself to the DHT. Defaults to `true`.
 * `client`: Actively search for and connect to discovered servers. Defaults to `true`.
 
-Returns a [`PeerDiscovery`](https://github.com/holepunchto/hyperswarm/blob/v3/README.md#peerdiscovery-api) object.
+Returns a [`PeerDiscovery`](https://github.com/samooth/spaceswarm/blob/v3/README.md#peerdiscovery-api) object.
 
 #### Clients and Servers
-In Hyperswarm, there are two ways for peers to join the swarm: client mode and server mode. If you've previously used Hyperswarm v2, these were called "lookup" and "announce", but we now think "client" and "server" are more descriptive.
+In Spaceswarm, there are two ways for peers to join the swarm: client mode and server mode. If you've previously used Spaceswarm v2, these were called "lookup" and "announce", but we now think "client" and "server" are more descriptive.
 
 When you join a topic as a server, the swarm will start accepting incoming connections from clients (peers that have joined the same topic in client mode). Server mode will announce your keypair to the DHT, so that other peers can discover your server. When server connections are emitted, they are not associated with a specific topic -- the server only knows it received an incoming connection.
 
@@ -115,7 +115,7 @@ Stop attempting direct connections to a known peer.
 If a direct connection is already established, that connection will __not__ be destroyed by `leavePeer`.
 
 #### `const discovery = swarm.status(topic)`
-Get the [`PeerDiscovery`](https://github.com/holepunchto/hyperswarm/blob/v3/README.md#peerdiscovery-api) object associated with the topic, if it exists.
+Get the [`PeerDiscovery`](https://github.com/samooth/spaceswarm/blob/v3/README.md#peerdiscovery-api) object associated with the topic, if it exists.
 
 #### `await swarm.listen()`
 Explicitly start listening for incoming connections. This will be called internally after the first `join`, so it rarely needs to be called manually.

@@ -1,5 +1,5 @@
 const { EventEmitter } = require('events')
-const DHT = require('hyperdht')
+const DHT = require('../spacedht')
 const spq = require('shuffled-priority-queue')
 const b4a = require('b4a')
 const unslab = require('unslab')
@@ -18,7 +18,7 @@ const ERR_MISSING_TOPIC = 'Topic is required and must be a 32-byte buffer'
 const ERR_DESTROYED = 'Swarm has been destroyed'
 const ERR_DUPLICATE = 'Duplicate connection'
 
-module.exports = class Hyperswarm extends EventEmitter {
+module.exports = class Spaceswarm extends EventEmitter {
   constructor (opts = {}) {
     super()
     const {

@@ -1,9 +1,9 @@
 const test = require('brittle')
-const createTestnet = require('hyperdht/testnet')
+const createTestnet = require('../../spacedht/testnet')
 const { timeout, flushConnections } = require('./helpers')
 const b4a = require('b4a')
 
-const Hyperswarm = require('..')
+const Spaceswarm = require('..')
 
 const BACKOFFS = [
   100,
@@ -15,8 +15,8 @@ const BACKOFFS = [
 test('one server, one client - first connection', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   t.plan(1)
 
@@ -43,8 +43,8 @@ test('one server, one client - first connection', async (t) => {
 test('two servers - first connection', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   const connection1Test = t.test('connection1')
   const connection2Test = t.test('connection2')
@@ -77,8 +77,8 @@ test('two servers - first connection', async (t) => {
 test('one server, one client - single reconnect', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   const serverReconnectsTest = t.test('server reconnects')
   const clientReconnectsTest = t.test('client reconnects')
@@ -130,8 +130,8 @@ test('one server, one client - single reconnect', async (t) => {
 test('one server, one client - maximum reconnects', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   let connections = 0
   swarm2.on('connection', (conn, info) => {
@@ -158,8 +158,8 @@ test('one server, one client - maximum reconnects', async (t) => {
 test('one server, one client - banned peer does not reconnect', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   let connections = 0
   swarm2.on('connection', (conn, info) => {
@@ -192,8 +192,8 @@ test('two servers, two clients - simple deduplication', async (t) => {
 
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   t.teardown(async () => {
     await swarm1.destroy()
@@ -217,8 +217,8 @@ test('two servers, two clients - simple deduplication', async (t) => {
 test('one server, two clients - topic multiplexing', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   let clientConnections = 0
   let peerInfo = null
@@ -252,9 +252,9 @@ test('one server, two clients - topic multiplexing', async (t) => {
 test('one server, two clients - first connection', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
-  const swarm3 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
+  const swarm3 = new Spaceswarm({ bootstrap })
 
   const connection1To2Test = t.test('connection 1 to 2')
   const connection1To3Test = t.test('connection 1 to 3')
@@ -303,9 +303,9 @@ test('one server, two clients - if a second client joins after the server leaves
 
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm3 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm3 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   swarm1.on('connection', (conn) => {
     conn.on('error', noop)
@@ -338,9 +338,9 @@ test('one server, two clients - if a second client joins after the server leaves
 test('two servers, one client - refreshing a peer discovery instance discovers new server', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm3 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm3 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
 
   let clientConnections = 0
   swarm3.on('connection', (conn) => {
@@ -375,8 +375,8 @@ test('one server, one client - correct deduplication when a client connection is
   t.plan(4)
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: BACKOFFS, jitter: 0 })
   t.teardown(async () => {
     await swarm1.destroy()
     await swarm2.destroy()
@@ -421,9 +421,9 @@ test('one server, one client - correct deduplication when a client connection is
 test('flush when max connections reached', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap, maxPeers: 1 })
-  const swarm3 = new Hyperswarm({ bootstrap, maxPeers: 1 })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap, maxPeers: 1 })
+  const swarm3 = new Spaceswarm({ bootstrap, maxPeers: 1 })
 
   const topic = Buffer.alloc(32).fill('hello world')
 
@@ -452,8 +452,8 @@ test('flush when max connections reached', async (t) => {
 test('rejoining with different client/server opts refreshes', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   const topic = Buffer.alloc(32).fill('hello world')
 
@@ -476,7 +476,7 @@ test('rejoining with different client/server opts refreshes', async (t) => {
 test('topics returns peer-discovery objects', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm = new Hyperswarm({ bootstrap })
+  const swarm = new Spaceswarm({ bootstrap })
   const topic1 = Buffer.alloc(32).fill('topic 1')
   const topic2 = Buffer.alloc(32).fill('topic 2')
 
@@ -494,8 +494,8 @@ test('topics returns peer-discovery objects', async (t) => {
 test('multiple discovery sessions with different opts', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   const topic = Buffer.alloc(32).fill('hello world')
 
@@ -532,7 +532,7 @@ test('multiple discovery sessions with different opts', async (t) => {
 test('closing all discovery sessions clears all peer-discovery objects', async t => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm = new Hyperswarm({ bootstrap })
+  const swarm = new Spaceswarm({ bootstrap })
 
   const topic1 = Buffer.alloc(32).fill('hello')
   const topic2 = Buffer.alloc(32).fill('world')
@@ -552,8 +552,8 @@ test('closing all discovery sessions clears all peer-discovery objects', async t
 test('peer-discovery object deleted when corresponding connection closes (server)', async t => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   const connected = t.test('connection')
   connected.plan(1)
@@ -603,8 +603,8 @@ test('peer-discovery object deleted when corresponding connection closes (client
   // We want to test it eventually gets gc'd after all the retries
   // so we don't care about waiting between retries
   const instaBackoffs = [0, 0, 0, 0]
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: instaBackoffs, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap, backoffs: instaBackoffs, jitter: 0 })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: instaBackoffs, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap, backoffs: instaBackoffs, jitter: 0 })
 
   let hasBeen1 = false
   swarm2.on('update', async () => {
@@ -641,8 +641,8 @@ test('no default error handler set when connection event is emitted', async (t) 
 
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   t.teardown(async () => {
     await swarm1.destroy()
@@ -668,8 +668,8 @@ test('no default error handler set when connection event is emitted', async (t) 
 test('peerDiscovery has unslabbed closestNodes', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   const tConnect = t.test('connected')
   tConnect.plan(2)
@@ -705,8 +705,8 @@ test('peerDiscovery has unslabbed closestNodes', async (t) => {
 test('topic and peer get unslabbed in PeerInfo', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   t.plan(3)
 
@@ -745,10 +745,10 @@ test('topic and peer get unslabbed in PeerInfo', async (t) => {
   swarm2.join(topic, { client: true, server: false })
 })
 
-test('port opt gets passed on to hyperdht', async (t) => {
+test('port opt gets passed on to spacedht', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap, port: [10000, 10100] })
+  const swarm1 = new Spaceswarm({ bootstrap, port: [10000, 10100] })
   t.alike(swarm1.dht.io.portRange, [10000, 10100])
   await swarm1.destroy()
 })

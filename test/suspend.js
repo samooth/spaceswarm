@@ -1,15 +1,15 @@
 const test = require('brittle')
-const createTestnet = require('hyperdht/testnet')
+const createTestnet = require('../../spacedht/testnet')
 
-const Hyperswarm = require('..')
+const Spaceswarm = require('..')
 
 test('suspend + resume', async (t) => {
   t.plan(4)
 
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   t.teardown(async () => {
     await swarm1.destroy()

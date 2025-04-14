@@ -1,13 +1,13 @@
 const test = require('brittle')
-const createTestnet = require('hyperdht/testnet')
+const createTestnet = require('../../spacedht/testnet')
 
-const Hyperswarm = require('..')
+const Spaceswarm = require('..')
 
 test('join peer - can establish direct connections to public keys', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   await swarm2.listen() // Ensure that swarm2's public key is being announced
 
@@ -57,7 +57,7 @@ test('join peer - can establish direct connections to public keys', async (t) =>
 test('join peer - attempt to connect to self is a no-op', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm = new Hyperswarm({ bootstrap })
+  const swarm = new Spaceswarm({ bootstrap })
   await swarm.listen()
 
   swarm.joinPeer(swarm.keyPair.publicKey)
@@ -69,8 +69,8 @@ test('join peer - attempt to connect to self is a no-op', async (t) => {
 test('leave peer - will stop reconnecting to previously joined peers', async (t) => {
   const { bootstrap } = await createTestnet(3, t.teardown)
 
-  const swarm1 = new Hyperswarm({ bootstrap })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   await swarm2.listen() // Ensure that swarm2's public key is being announced
 
@@ -131,8 +131,8 @@ test('leave peer - no memory leak if other side closed connection first', async 
   // No need to wait between retries, we just want to test
   // that it cleans up after the failed retry
   const instaBackoffs = [0, 0, 0, 0]
-  const swarm1 = new Hyperswarm({ bootstrap, backoffs: instaBackoffs, jitter: 0 })
-  const swarm2 = new Hyperswarm({ bootstrap })
+  const swarm1 = new Spaceswarm({ bootstrap, backoffs: instaBackoffs, jitter: 0 })
+  const swarm2 = new Spaceswarm({ bootstrap })
 
   let hasBeen1 = false
   swarm1.on('update', async () => {
