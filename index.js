@@ -1,5 +1,5 @@
 const { EventEmitter } = require('events')
-const DHT = require('../spacedht')
+const DHT = require('spacedht')
 const spq = require('shuffled-priority-queue')
 const b4a = require('b4a')
 const unslab = require('unslab')
