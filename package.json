@@ -20,7 +20,7 @@
     "sodium-universal": "^5.0.1",
     "spacecore-crypto": "^0.0.1",
     "spacecore-id-encoding": "^1.3.1",
-    "spacedht": "^0.0.7",
+    "spacedht": "^0.0.8",
     "spaceswarm-secret-stream": "^0.0.2",
     "unslab": "^1.3.0"
   },
