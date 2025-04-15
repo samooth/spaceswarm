@@ -13,21 +13,21 @@
     }
   },
   "dependencies": {
-    "b4a": "^1.3.1",
-    "bare-events": "^2.2.0",
+    "b4a": "^1.6.7",
+    "bare-events": "^2.5.4",
     "safety-catch": "^1.0.2",
     "shuffled-priority-queue": "^2.1.0",
     "sodium-universal": "^5.0.1",
-    "spacecore-crypto": "^0.0.1",
-    "spacecore-id-encoding": "^1.3.1",
+    "spacecore-crypto": "^0.0.2",
+    "spacecore-id-encoding": "^1.3.2",
     "spacedht": "^0.0.8",
-    "spaceswarm-secret-stream": "^0.0.2",
+    "spaceswarm-secret-stream": "^0.0.3",
     "unslab": "^1.3.0"
   },
   "devDependencies": {
-    "brittle": "^3.0.2",
-    "sodium-secretstream": "^1.1.1",
-    "standard": "^17.0.0"
+    "brittle": "^3.13.1",
+    "sodium-secretstream": "^1.2.0",
+    "standard": "^17.1.2"
   },
   "scripts": {
     "test": "standard && node test/all.js",
